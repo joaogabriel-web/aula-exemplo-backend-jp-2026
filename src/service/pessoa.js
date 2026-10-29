@@ -2,40 +2,52 @@ import Pessoa from '../model/pessoa.js'
 
 class ServicePessoa {
 
-    Buscar() {
-        return Pessoa.Buscar()
+    async Buscar() {
+        return Pessoa.findAll()
     }
     
-    BuscarUm(id) {
+    async BuscarUm(id) {
         if(!id || isNaN(id)) {
             throw new Error("Favor informar somente números")
         }
 
-        return Pessoa.BuscarUm(id)
+        return Pessoa.findAndCountAll(id)
     }
     
-    Criar(nome, idade) {
+    async Criar(nome, idade) {
         if(!nome) {
             throw new Error("Favor informar o nome")
         }
         
-        Pessoa.Criar(nome, idade)
+       await Pessoa.create({ nome, idade })
     }
     
-    Alterar(id, nome) {
+    async Alterar(id, nome) {
         if(!id || isNaN(id) || !nome) {
             throw new Error("Favor informar todos os dados")
         }
+        const pessoaAlterar = await Pessoa.findByPk(id)
+
+        if (condition) {
+            throw new Error("Pessoa nao encontrada")
+        }
         
-        Pessoa.Alterar(id, nome)
+        pessoaAlterar.nome = nome
+
+        await pessoaAlterar.save()
     }
 
-    Deletar(id) {
+    async Deletar(id) {
         if(!id || isNaN(id)) {
             throw new Error("Favor informar o Id corretamente")
         }
-        
-        Pessoa.Deletar(id)
+        const pessoaDelete = await Pessoa.findByPk(id)
+
+        if (!pessoaDelete) {
+            throw new Error("Favor informar o Id corretamente")
+        }
+
+        await pessoaDelete.destroy()
     }
     
 }
