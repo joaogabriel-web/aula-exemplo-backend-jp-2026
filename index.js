@@ -8,11 +8,15 @@ app.use(express.json())
 app.use("/api", router)
 
 database.db
-    .sync()
-    .then()
-    .catch()
-
-
-    app.listen(3000, () => {
-        console.log("Servidor ouvind na porta 3000")
+    .sync( { force: true })
+    .then((_) => {
+        app.listen(3000, () => {
+            console.log("Servidor ouvind na porta 3000")
+        })
     })
+    .catch((e) => {
+        console.log(e)
+    })
+
+
+    
